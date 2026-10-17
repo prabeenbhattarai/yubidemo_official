@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import QuotePopup from "@/components/QuotePopup";
 import Toaster from "@/components/Toaster";
+import SiteIntro from "@/components/SiteIntro";
 import { getCompany, getFaqs, getProjects, getServices } from "@/lib/content";
 import { buildSearchIndex } from "@/lib/search";
 
@@ -26,6 +27,7 @@ export default async function SiteLayout({
 
   return (
     <>
+      <SiteIntro />
       <Header company={company} services={serviceMenu} search={searchIndex} />
       {/* Scroll-reveal animations start slightly off to the side; clip them so
           they never cause sideways scrolling on phones. */}

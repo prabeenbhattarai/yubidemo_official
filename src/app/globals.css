@@ -337,29 +337,45 @@ h1, h2, h3, h4, h5 {
 
 /* ---------------------------- Brand loader ---------------------------- */
 @keyframes loaderFade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes loaderBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-/* Short, sharp jolts like a jackhammer hitting concrete. */
-@keyframes loaderDrill {
-  0%, 100% { transform: translate(0, 0) rotate(0); }
-  20% { transform: translate(-0.4%, 1.2%) rotate(-0.6deg); }
-  40% { transform: translate(0.3%, -0.4%) rotate(0.5deg); }
-  60% { transform: translate(-0.2%, 1%) rotate(-0.3deg); }
-  80% { transform: translate(0.3%, -0.2%) rotate(0.4deg); }
+/* A red arc that grows, travels round the outline and shrinks again. */
+@keyframes loaderRing {
+  0% { stroke-dasharray: 2 98; stroke-dashoffset: 0; }
+  50% { stroke-dasharray: 38 62; stroke-dashoffset: -25; }
+  100% { stroke-dasharray: 2 98; stroke-dashoffset: -100; }
 }
-@keyframes loaderDust {
-  0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
-  20% { opacity: 1; }
-  100% { transform: translate(var(--dx, 14px), -18px) scale(1.6); opacity: 0; }
-}
-@keyframes loaderBar { 0% { left: -35%; } 100% { left: 100%; } }
+@keyframes loaderSpin { to { transform: rotate(360deg); } }
+@keyframes loaderLogoIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
 @keyframes loaderTextIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes loaderTick { from { stroke-dashoffset: 24; } to { stroke-dashoffset: 0; } }
 .loader-backdrop { animation: loaderFade 0.25s ease-out both; }
-.loader-bob { animation: loaderBob 2.4s ease-in-out infinite; }
-.loader-drill { transform-origin: 74% 90%; animation: loaderDrill 0.16s linear infinite; }
-.loader-dust { animation: loaderDust 0.9s ease-out infinite; }
-.loader-dust:nth-child(even) { --dx: -14px; }
-.loader-bar { animation: loaderBar 1.3s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+.loader-ring {
+  transform-origin: 50% 50%;
+  animation: loaderRing 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite, loaderSpin 2.4s linear infinite;
+}
+/* Only the jackhammer moves: short, sharp jolts like it's hitting concrete. */
+@keyframes loaderDrill {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-0.25%, 0.9%); }
+  50% { transform: translate(0.2%, -0.2%); }
+  75% { transform: translate(-0.15%, 0.7%); }
+}
+.loader-drill { animation: loaderDrill 0.12s linear infinite; }
+/* Dust puffing out sideways from the tip and drifting up. */
+@keyframes loaderDust {
+  0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+  20% { opacity: 0.9; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% - 8px)) scale(2.2); opacity: 0; }
+}
+.loader-dust {
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, rgba(120, 106, 94, 0.95), rgba(150, 138, 125, 0.55) 55%, transparent 72%);
+  --dx: 16px;
+  animation: loaderDust 0.9s ease-out infinite;
+}
+.loader-dust:nth-child(even) { --dx: -16px; }
+.loader-dust:nth-child(3n) { --dx: 6px; }
+.loader-logo-in { animation: loaderLogoIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .loader-text-in { animation: loaderTextIn 0.35s ease-out both; }
 .loader-tick { stroke-dasharray: 24; animation: loaderTick 0.45s 0.1s ease-out both; }
 
@@ -372,6 +388,16 @@ h1, h2, h3, h4, h5 {
 .toast-timer { animation-name: toastTimer; animation-timing-function: linear; animation-fill-mode: forwards; }
 
 @media (prefers-reduced-motion: reduce) {
-  .loader-bob, .loader-drill, .loader-dust, .toast-in, .toast-out { animation: none; }
-  .loader-bar { animation-duration: 3s; }
+  .loader-logo-in, .loader-drill, .loader-dust, .toast-in, .toast-out { animation: none; }
+  .loader-ring { animation-duration: 3s, 6s; }
+}
+
+/* ------------------------- First-visit intro ------------------------- */
+/* Change the 3s delay to show the intro for shorter or longer. */
+.site-intro { animation: introOut 0.6s ease 3s forwards; }
+@keyframes introOut {
+  to { opacity: 0; visibility: hidden; display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-intro { animation-delay: 1.5s; }
 }

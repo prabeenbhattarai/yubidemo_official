@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import LoaderMark from "./LoaderMark";
 
 export type LoaderStatus = "idle" | "loading" | "success" | "error";
 
@@ -27,8 +28,7 @@ function LoadingText() {
 
 /**
  * Full-screen branded loader shown while a quote is being sent. No card — the
- * logo floats over a frosted see-through layer. The jackhammer is a separate
- * image layer so it can "drill" (shake and kick up dust) on its own.
+ * logo floats over a frosted see-through layer.
  */
 export default function BrandLoader({
   status,
@@ -72,37 +72,11 @@ export default function BrandLoader({
       className="loader-backdrop fixed inset-0 z-[95] flex flex-col items-center justify-center bg-white/80 px-6 text-center backdrop-blur-md"
       onMouseDown={(e) => !busy && e.target === e.currentTarget && onClose()}
     >
-      <div className={`relative w-[220px] sm:w-[260px] ${busy ? "loader-bob" : ""}`}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/loader-logo.png" alt="" width={418} height={342} className="block h-auto w-full" />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/loader-jackhammer.png"
-          alt=""
-          width={418}
-          height={342}
-          className={`absolute inset-0 h-auto w-full ${busy ? "loader-drill" : ""}`}
-        />
-        {busy && (
-          // Dust puffs at the jackhammer's tip (73.7% across, bottom of the logo).
-          <span aria-hidden className="absolute left-[73.7%] top-[97%]">
-            {[0, 1, 2, 3].map((i) => (
-              <span key={i} className="loader-dust absolute h-1.5 w-1.5 rounded-full bg-[#6b4a42]/60" style={{ animationDelay: `${i * 0.18}s` }} />
-            ))}
-          </span>
-        )}
-      </div>
+      <LoaderMark animate={busy} className="w-[170px] sm:w-[200px]" />
 
-      <div className="mt-10 flex min-h-[96px] flex-col items-center">
+      <div className="mt-8 flex min-h-[96px] flex-col items-center">
         {busy ? (
-          <>
-            <span className="relative block h-[3px] w-48 overflow-hidden rounded-full bg-ink/10">
-              <span className="loader-bar absolute inset-y-0 w-1/3 rounded-full bg-brand" />
-            </span>
-            <div className="mt-5">
-              <LoadingText />
-            </div>
-          </>
+          <LoadingText />
         ) : (
           <div className="loader-text-in flex flex-col items-center">
             <span
