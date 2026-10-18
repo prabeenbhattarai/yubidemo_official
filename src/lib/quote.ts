@@ -37,7 +37,9 @@ const TEST_SECRET = "1x0000000000000000000000000000000AA";
 export async function verifyTurnstile(token: string, ip: string | null): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
   if (!secret && process.env.NODE_ENV === "production") {
-    console.warn("[quote] TURNSTILE_SECRET_KEY is not set — the human check is not enforced.");
+    // Never fall back to the always-pass test key on the live site.
+    console.error("[quote] TURNSTILE_SECRET_KEY is not set — rejecting submissions until it is.");
+    return false;
   }
   if (!token) return false;
   const body = new URLSearchParams({ secret: secret || TEST_SECRET, response: token });
@@ -223,10 +225,12 @@ export async function sendSiteEmail(mail: {
   text: string;
   html: string;
   replyTo?: { name: string; address: string };
+  attachments?: { filename: string; content: Buffer; contentType: string }[];
 }): Promise<void> {
   if (!isEmailConfigured()) {
     if (process.env.NODE_ENV === "production") throw new Error("SMTP_USER / SMTP_PASS are not set.");
-    console.log(`[email] Email not configured — would send to ${mail.to.join(", ")}:\n${mail.subject}\n${mail.text}`);
+    const files = mail.attachments?.map((a) => `${a.filename} (${Math.round(a.content.length / 1024)} KB)`).join(", ");
+    console.log(`[email] Email not configured — would send to ${mail.to.join(", ")}:\n${mail.subject}\n${mail.text}${files ? `\nAttachments: ${files}` : ""}`);
     return;
   }
 

@@ -10,13 +10,14 @@ export default async function AdminDashboard() {
   ]);
 
   const cards = [
-    { label: "Quote Requests", href: "/admin/quotes", desc: "Enquiries from the website, with spam checks" },
-    { label: "Company & Contact", href: "/admin/company", desc: "Phone, email, address, ABN, tagline" },
-    { label: "Homepage Content", href: "/admin/homepage", desc: "Hero, about, mission, why-us, sustainability" },
-    { label: "Services", href: "/admin/services", desc: `${services.length} service${services.length === 1 ? "" : "s"}` },
-    { label: "Projects", href: "/admin/projects", desc: `${projects.length} project${projects.length === 1 ? "" : "s"}` },
-    { label: "FAQs", href: "/admin/faqs", desc: `${faqs.length} question${faqs.length === 1 ? "" : "s"}` },
-    { label: "Gallery", href: "/admin/gallery", desc: `${gallery.length} photo${gallery.length === 1 ? "" : "s"}` },
+    { label: "Quote Requests", href: "/api/admin/yubidemo/quotes", desc: "Enquiries from the website, with spam checks" },
+    { label: "Careers", href: "/api/admin/yubidemo/careers", desc: "Post jobs and review applications with CVs" },
+    { label: "Company & Contact", href: "/api/admin/yubidemo/company", desc: "Phone, email, address, ABN, tagline" },
+    { label: "Homepage Content", href: "/api/admin/yubidemo/homepage", desc: "Hero, about, mission, why-us, sustainability" },
+    { label: "Services", href: "/api/admin/yubidemo/services", desc: `${services.length} service${services.length === 1 ? "" : "s"}` },
+    { label: "Projects", href: "/api/admin/yubidemo/projects", desc: `${projects.length} project${projects.length === 1 ? "" : "s"}` },
+    { label: "FAQs", href: "/api/admin/yubidemo/faqs", desc: `${faqs.length} question${faqs.length === 1 ? "" : "s"}` },
+    { label: "Gallery", href: "/api/admin/yubidemo/gallery", desc: `${gallery.length} photo${gallery.length === 1 ? "" : "s"}` },
   ];
 
   return (

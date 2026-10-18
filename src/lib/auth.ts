@@ -1,23 +1,15 @@
 import "server-only";
 import { SignJWT, jwtVerify } from "jose";
+import { adminPassword, sessionSecret } from "./admin-config";
 
 export const SESSION_COOKIE = "yubi_admin";
 const ALG = "HS256";
 
-function secret(): Uint8Array {
-  const s =
-    process.env.ADMIN_SESSION_SECRET ||
-    "dev-only-insecure-secret-change-me-in-env-local";
-  return new TextEncoder().encode(s);
-}
-
-/** The admin password. Defaults to "admin" for first run — change it in .env.local. */
-export function adminPassword(): string {
-  return process.env.ADMIN_PASSWORD || "admin";
-}
+export { adminPassword, adminSetupProblem } from "./admin-config";
 
 export function checkPassword(input: string): boolean {
   const expected = adminPassword();
+  if (!expected) return false;
   // constant-ish comparison
   if (input.length !== expected.length) return false;
   let diff = 0;
@@ -26,17 +18,20 @@ export function checkPassword(input: string): boolean {
 }
 
 export async function createSessionToken(): Promise<string> {
+  const key = sessionSecret();
+  if (!key) throw new Error("Admin is locked: ADMIN_SESSION_SECRET is not set.");
   return new SignJWT({ role: "admin" })
     .setProtectedHeader({ alg: ALG })
     .setIssuedAt()
     .setExpirationTime("7d")
-    .sign(secret());
+    .sign(key);
 }
 
 export async function verifySessionToken(token: string | undefined): Promise<boolean> {
-  if (!token) return false;
+  const key = sessionSecret();
+  if (!token || !key) return false;
   try {
-    const { payload } = await jwtVerify(token, secret());
+    const { payload } = await jwtVerify(token, key);
     return payload.role === "admin";
   } catch {
     return false;

@@ -5,12 +5,14 @@ import {
   defaultFaqs,
   defaultGallery,
   defaultHome,
+  defaultJobs,
   defaultProjects,
   defaultServices,
   type Company,
   type Faq,
   type GalleryImage,
   type Home,
+  type Job,
   type Project,
   type Service,
 } from "./content-types";
@@ -63,6 +65,14 @@ export function getProjects(): Promise<Project[]> {
 
 export function getFaqs(): Promise<Faq[]> {
   return readCollection<Faq>("faqs", defaultFaqs);
+}
+
+export function getJobs(): Promise<Job[]> {
+  return readCollection<Job>("jobs", defaultJobs);
+}
+
+export async function getOpenJobs(): Promise<Job[]> {
+  return (await getJobs()).filter((j) => j.open && j.id);
 }
 
 export function getGallery(): Promise<GalleryImage[]> {

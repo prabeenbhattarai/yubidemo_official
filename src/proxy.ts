@@ -1,18 +1,15 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { jwtVerify } from "jose";
+import { sessionSecret } from "@/lib/admin-config";
 
 const SESSION_COOKIE = "yubi_admin";
 
-function secret(): Uint8Array {
-  return new TextEncoder().encode(
-    process.env.ADMIN_SESSION_SECRET || "dev-only-insecure-secret-change-me-in-env-local"
-  );
-}
-
 async function isValid(token: string | undefined): Promise<boolean> {
-  if (!token) return false;
+  // No secret configured on the live site → nobody is treated as logged in.
+  const key = sessionSecret();
+  if (!token || !key) return false;
   try {
-    const { payload } = await jwtVerify(token, secret());
+    const { payload } = await jwtVerify(token, key);
     return payload.role === "admin";
   } catch {
     return false;
@@ -23,13 +20,13 @@ export default async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const valid = await isValid(req.cookies.get(SESSION_COOKIE)?.value);
 
-  if (pathname === "/admin/login") {
-    if (valid) return NextResponse.redirect(new URL("/admin", req.url));
+  if (pathname === "/api/admin/yubidemo/login") {
+    if (valid) return NextResponse.redirect(new URL("/api/admin/yubidemo", req.url));
     return NextResponse.next();
   }
 
   if (!valid) {
-    const url = new URL("/admin/login", req.url);
+    const url = new URL("/api/admin/yubidemo/login", req.url);
     url.searchParams.set("from", pathname);
     return NextResponse.redirect(url);
   }
@@ -37,5 +34,5 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/api/admin/yubidemo/:path*"],
 };

@@ -4,14 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/admin", label: "Dashboard" },
-  { href: "/admin/quotes", label: "Quote Requests" },
-  { href: "/admin/company", label: "Company & Contact" },
-  { href: "/admin/homepage", label: "Homepage Content" },
-  { href: "/admin/services", label: "Services" },
-  { href: "/admin/projects", label: "Projects" },
-  { href: "/admin/faqs", label: "FAQs" },
-  { href: "/admin/gallery", label: "Gallery" },
+  { href: "/api/admin/yubidemo", label: "Dashboard" },
+  { href: "/api/admin/yubidemo/quotes", label: "Quote Requests" },
+  { href: "/api/admin/yubidemo/careers", label: "Careers" },
+  { href: "/api/admin/yubidemo/company", label: "Company & Contact" },
+  { href: "/api/admin/yubidemo/homepage", label: "Homepage Content" },
+  { href: "/api/admin/yubidemo/services", label: "Services" },
+  { href: "/api/admin/yubidemo/projects", label: "Projects" },
+  { href: "/api/admin/yubidemo/faqs", label: "FAQs" },
+  { href: "/api/admin/yubidemo/gallery", label: "Gallery" },
 ];
 
 export default function AdminNav() {
@@ -19,7 +20,7 @@ export default function AdminNav() {
   return (
     <nav className="flex flex-col gap-1">
       {links.map((l) => {
-        const active = l.href === "/admin" ? pathname === "/admin" : pathname.startsWith(l.href);
+        const active = l.href === "/api/admin/yubidemo" ? pathname === "/api/admin/yubidemo" : pathname.startsWith(l.href);
         return (
           <Link
             key={l.href}

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Faq } from "@/lib/content-types";
-import { deleteFaqAction, saveFaqAction } from "@/app/admin/actions";
+import { deleteFaqAction, saveFaqAction } from "@/app/api/admin/yubidemo/actions";
 import Modal from "./Modal";
 
 export default function FaqsManager({ faqs }: { faqs: Faq[] }) {

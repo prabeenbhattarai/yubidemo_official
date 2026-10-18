@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import PageBanner from "@/components/PageBanner";
 import { ArrowRight, BriefcaseIcon, CheckCircle } from "@/components/Icons";
-import { getCompany } from "@/lib/content";
+import { getCompany, getOpenJobs } from "@/lib/content";
+import JobBoard from "@/components/careers/JobBoard";
 
 export const metadata: Metadata = {
   title: "Careers",
@@ -16,7 +17,7 @@ const perks = [
 ];
 
 export default async function CareersPage() {
-  const company = await getCompany();
+  const [company, jobs] = await Promise.all([getCompany(), getOpenJobs()]);
   const resumeHref = `mailto:${company.email}?subject=${encodeURIComponent("Resume — Yubi Demolition")}`;
 
   return (
@@ -34,7 +35,22 @@ export default async function CareersPage() {
               want to grow with a company that invests in its team, we&apos;d love to hear from you.
             </p>
 
-            {/* No open roles at the moment. Add listings back here when hiring. */}
+            {jobs.length > 0 ? (
+              <div className="mt-10">
+                <JobBoard
+                  jobs={jobs.map((j) => ({
+                    id: j.id!,
+                    title: j.title,
+                    type: j.type,
+                    location: j.location,
+                    summary: j.summary,
+                    details: j.details ?? [],
+                  }))}
+                  phone={{ display: company.phone, href: company.phoneHref }}
+                />
+              </div>
+            ) : (
+            // No open roles: jobs are posted in Admin → Careers.
             <div className="mt-10 flex flex-col items-start gap-5 border border-dashed border-gray-300 bg-[#fafafa] p-8 sm:flex-row sm:items-center">
               <span className="flex h-14 w-14 shrink-0 items-center justify-center bg-brand/10 text-brand">
                 <BriefcaseIcon className="h-7 w-7" />
@@ -50,6 +66,7 @@ export default async function CareersPage() {
                 Send Your Resume <ArrowRight className="h-4 w-4" />
               </a>
             </div>
+            )}
           </div>
 
           <aside className="bg-[#f4f5f7] p-8">

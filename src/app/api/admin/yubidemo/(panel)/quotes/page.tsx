@@ -66,7 +66,7 @@ export default async function QuotesAdmin({
           return (
             <a
               key={f.key}
-              href={f.key === "all" ? "/admin/quotes" : `/admin/quotes?show=${f.key}`}
+              href={f.key === "all" ? "/api/admin/yubidemo/quotes" : `/api/admin/yubidemo/quotes?show=${f.key}`}
               className={`a-btn ${show === f.key ? "a-btn-primary" : "a-btn-ghost"}`}
             >
               {f.label} ({count})

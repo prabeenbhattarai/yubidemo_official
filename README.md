@@ -9,7 +9,7 @@ backed by **Firebase** (Firestore + Storage).
 ```bash
 npm install
 npm run dev      # http://localhost:3000  (public site)
-                 # http://localhost:3000/admin  (admin panel)
+                 # http://localhost:3000/api/admin/yubidemo  (admin panel)
 ```
 
 The site works immediately using built-in default content. Connecting Firebase
@@ -19,7 +19,7 @@ The site works immediately using built-in default content. Connecting Firebase
 
 ## Admin panel
 
-- **URL:** `/admin` → redirects to `/admin/login`
+- **URL:** `/api/admin/yubidemo` → redirects to `/api/admin/yubidemo/login`
 - **Password:** set by `ADMIN_PASSWORD` in `.env.local` (defaults to `admin`)
 - **What you can control:** company/contact details, all homepage text + images,
   services (add/edit/delete + image), projects, FAQs, and the photo gallery.
@@ -92,7 +92,7 @@ Uploaded images go to **Firebase Storage** and are served via public URLs.
 | Area                       | Path                                     |
 | -------------------------- | ---------------------------------------- |
 | Public pages               | `src/app/(site)/`                        |
-| Admin panel                | `src/app/admin/`                         |
+| Admin panel                | `src/app/api/admin/yubidemo/`            |
 | Content types + defaults   | `src/lib/content-types.ts`               |
 | Firestore read/write layer | `src/lib/content.ts`                     |
 | Firebase Admin init        | `src/lib/firebase-admin.ts`              |

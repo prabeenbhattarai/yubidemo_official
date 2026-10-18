@@ -80,6 +80,23 @@ export type Faq = {
   order: number;
 };
 
+export type JobType = "Full-time" | "Part-time" | "Casual" | "Contract";
+export const JOB_TYPES: JobType[] = ["Full-time", "Part-time", "Casual", "Contract"];
+
+export type Job = {
+  id?: string;
+  title: string;
+  type: JobType;
+  location: string;
+  /** One or two sentences shown on the job card. */
+  summary: string;
+  /** Bullet points: duties, requirements, what's on offer. */
+  details: string[];
+  /** Only open jobs are shown on the Careers page and accept applications. */
+  open: boolean;
+  order: number;
+};
+
 export type GalleryImage = {
   id?: string;
   url: string;
@@ -254,6 +271,9 @@ export const defaultFaqs: Faq[] = [
   { question: "Credible international sustainability standards?", answer: "Our processes align with recognised environmental and waste-management practices. We prioritise material recovery, responsible disposal, and reduced environmental impact on every site we work on.", order: 3 },
   { question: "If I have questions, where can I find answers?", answer: "You can reach our team any time through the contact form on this page, by phone, or by email. We aim to answer every enquiry as quickly as possible.", order: 4 },
 ];
+
+// No jobs are advertised by default — add them in Admin → Careers.
+export const defaultJobs: Job[] = [];
 
 export const defaultGallery: GalleryImage[] = [
   { url: "/images/demo12.jpeg", alt: "Commercial interior strip-out", folder: "Industrial Warehouse Demolition", order: 1 },

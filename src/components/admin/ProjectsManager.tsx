@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Project } from "@/lib/content-types";
-import { deleteProjectAction, saveProjectAction } from "@/app/admin/actions";
+import { deleteProjectAction, saveProjectAction } from "@/app/api/admin/yubidemo/actions";
 import ImageUploader from "./ImageUploader";
 import Modal from "./Modal";
 

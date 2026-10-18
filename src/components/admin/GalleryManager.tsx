@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { GalleryImage } from "@/lib/content-types";
-import { deleteGalleryAction, saveGalleryAction } from "@/app/admin/actions";
+import { deleteGalleryAction, saveGalleryAction } from "@/app/api/admin/yubidemo/actions";
 import ImageUploader from "./ImageUploader";
 import Modal from "./Modal";
 

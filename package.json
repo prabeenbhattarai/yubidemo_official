@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "node --env-file=.env.local --import tsx scripts/seed.ts",
-    "email:test": "node --env-file=.env.local --import tsx scripts/test-email.ts"
+    "email:test": "node --env-file=.env.local --import tsx scripts/test-email.ts",
+    "firebase:check": "node --env-file=.env.local --import tsx scripts/check-firebase.ts"
   },
   "dependencies": {
     "firebase-admin": "^14.3.0",
