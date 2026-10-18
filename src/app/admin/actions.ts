@@ -211,6 +211,7 @@ export async function saveGalleryAction(fd: FormData) {
     id: str(fd, "id") || undefined,
     url: str(fd, "url"),
     alt: str(fd, "alt") || "Yubi Demolition project",
+    folder: str(fd, "folder"),
     order: Number(str(fd, "order") || Date.now()),
   };
   await saveDoc<GalleryImage>("gallery", item);

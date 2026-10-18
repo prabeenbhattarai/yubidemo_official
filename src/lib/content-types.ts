@@ -83,7 +83,10 @@ export type Faq = {
 export type GalleryImage = {
   id?: string;
   url: string;
+  /** Kept for screen readers only; not shown on the page. */
   alt: string;
+  /** Project title this photo belongs to. Empty = general (only in the "Yubi Demolition" folder). */
+  folder?: string;
   order: number;
 };
 
@@ -253,17 +256,17 @@ export const defaultFaqs: Faq[] = [
 ];
 
 export const defaultGallery: GalleryImage[] = [
-  { url: "/images/demo12.jpeg", alt: "Commercial interior strip-out", order: 1 },
-  { url: "/images/structural-demo.jpeg", alt: "Structural demolition, steel frame", order: 2 },
+  { url: "/images/demo12.jpeg", alt: "Commercial interior strip-out", folder: "Industrial Warehouse Demolition", order: 1 },
+  { url: "/images/structural-demo.jpeg", alt: "Structural demolition, steel frame", folder: "Rooftop Plant Removal", order: 2 },
   { url: "/images/demo1.jpeg", alt: "Hot works and cutting on site", order: 3 },
-  { url: "/images/demo8.jpeg", alt: "Concrete slab cutting and removal", order: 4 },
+  { url: "/images/demo8.jpeg", alt: "Concrete slab cutting and removal", folder: "Concrete Cutting Works", order: 4 },
   { url: "/images/demo10.jpeg", alt: "Crew member grinding steelwork", order: 5 },
   { url: "/images/demo11.jpeg", alt: "Timber strip-out in progress", order: 6 },
-  { url: "/images/demo9.jpeg", alt: "Commercial tenancy stripped back", order: 7 },
-  { url: "/images/retail-stripout.jpeg", alt: "Retail site clearance", order: 8 },
+  { url: "/images/demo9.jpeg", alt: "Commercial tenancy stripped back", folder: "Commercial Office Strip-Out", order: 7 },
+  { url: "/images/retail-stripout.jpeg", alt: "Retail site clearance", folder: "Retail Site Clearance", order: 8 },
   { url: "/images/demo7.jpeg", alt: "Concrete cutting and site preparation", order: 9 },
   { url: "/images/demo.jpeg", alt: "Waste removal and site clearance", order: 10 },
-  { url: "/images/demo3.jpeg", alt: "Residential strip-out", order: 11 },
+  { url: "/images/demo3.jpeg", alt: "Residential strip-out", folder: "School Building Demolition", order: 11 },
   { url: "/images/demo4.jpeg", alt: "Room strip-out ready for refurbishment", order: 12 },
   { url: "/images/demo5.jpeg", alt: "Bathroom strip-out", order: 13 },
   { url: "/images/demo6.jpeg", alt: "Bathroom stripped to brick", order: 14 },
