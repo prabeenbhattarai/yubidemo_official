@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PageBanner from "@/components/PageBanner";
 import GalleryBrowser from "@/components/GalleryBrowser";
-import { getGallery, getProjects } from "@/lib/content";
+import { getGallery, getGalleryFolders } from "@/lib/content";
 import { buildFolders } from "@/lib/gallery";
 
 export const metadata: Metadata = {
@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 };
 
 export default async function GalleryPage() {
-  const [gallery, projects] = await Promise.all([getGallery(), getProjects()]);
-  const folders = buildFolders(gallery, projects);
-  const hasPhotos = folders[0].photos.length > 0;
+  const [gallery, folderList] = await Promise.all([getGallery(), getGalleryFolders()]);
+  const folders = buildFolders(gallery, folderList);
+  const hasPhotos = folders.length > 0;
 
   return (
     <>

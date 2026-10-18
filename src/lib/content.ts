@@ -4,12 +4,14 @@ import {
   defaultCompany,
   defaultFaqs,
   defaultGallery,
+  defaultGalleryFolders,
   defaultHome,
   defaultJobs,
   defaultProjects,
   defaultServices,
   type Company,
   type Faq,
+  type GalleryFolder,
   type GalleryImage,
   type Home,
   type Job,
@@ -79,6 +81,10 @@ export function getGallery(): Promise<GalleryImage[]> {
   return readCollection<GalleryImage>("gallery", defaultGallery);
 }
 
+export function getGalleryFolders(): Promise<GalleryFolder[]> {
+  return readCollection<GalleryFolder>("galleryFolders", defaultGalleryFolders);
+}
+
 /* ------------------------------- WRITES ------------------------------- */
 // These are only ever called from authenticated admin server actions.
 
@@ -117,4 +123,50 @@ export async function saveDoc<T extends { id?: string }>(
 export async function deleteDoc(collection: string, id: string): Promise<void> {
   assertConfigured();
   await db().collection(collection).doc(id).delete();
+}
+
+/* --------------------------- GALLERY (bulk) --------------------------- */
+// Firestore batches hold at most 500 writes.
+async function inBatches<T>(items: T[], write: (batch: FirebaseFirestore.WriteBatch, item: T) => void) {
+  for (let i = 0; i < items.length; i += 450) {
+    const batch = db().batch();
+    items.slice(i, i + 450).forEach((item) => write(batch, item));
+    await batch.commit();
+  }
+}
+
+/**
+ * The site shows the built-in photos and folder only while the database is
+ * empty. Before the first gallery change, save them for real so they don't
+ * vanish the moment a new photo is uploaded.
+ */
+export async function ensureGallerySaved(): Promise<void> {
+  assertConfigured();
+  const [folders, photos] = await Promise.all([
+    db().collection("galleryFolders").limit(1).get(),
+    db().collection("gallery").limit(1).get(),
+  ]);
+  if (folders.empty) {
+    await inBatches(defaultGalleryFolders, (b, { id, ...f }) => b.set(db().collection("galleryFolders").doc(id!), f));
+  }
+  if (photos.empty) {
+    await inBatches(defaultGallery, (b, g) =>
+      b.set(db().collection("gallery").doc(), { url: g.url, alt: g.alt, folderId: g.folderId, order: g.order })
+    );
+  }
+}
+
+export async function addGalleryImages(images: Omit<GalleryImage, "id">[]): Promise<void> {
+  assertConfigured();
+  await inBatches(images, (b, img) => b.set(db().collection("gallery").doc(), img));
+}
+
+export async function moveGalleryImages(ids: string[], folderId: string): Promise<void> {
+  assertConfigured();
+  await inBatches(ids, (b, id) => b.update(db().collection("gallery").doc(id), { folderId }));
+}
+
+export async function deleteGalleryImages(ids: string[]): Promise<void> {
+  assertConfigured();
+  await inBatches(ids, (b, id) => b.delete(db().collection("gallery").doc(id)));
 }

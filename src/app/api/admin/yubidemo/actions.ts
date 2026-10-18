@@ -11,15 +11,20 @@ import {
   verifySessionToken,
 } from "@/lib/auth";
 import {
+  addGalleryImages,
   deleteDoc,
+  deleteGalleryImages,
+  ensureGallerySaved,
   getCompany,
+  getGallery,
+  moveGalleryImages,
   saveCompany,
   saveDoc,
   saveHome,
 } from "@/lib/content";
 import { forwardQuote, parseEmails } from "@/lib/quote";
 import { deleteApplication } from "@/lib/careers";
-import { JOB_TYPES, type Company, type Home, type Service, type Project, type Faq, type GalleryImage, type Job, type JobType } from "@/lib/content-types";
+import { JOB_TYPES, type Company, type Home, type Service, type Project, type Faq, type GalleryFolder, type Job, type JobType } from "@/lib/content-types";
 
 /* ------------------------------- AUTH ------------------------------- */
 
@@ -210,26 +215,92 @@ export async function deleteFaqAction(fd: FormData) {
 }
 
 /* ---------------------------- GALLERY ---------------------------- */
+// Folder actions are form posts (redirect back with a message); the photo
+// actions are called from the bulk uploader / selection bar and return a result.
 
-export async function saveGalleryAction(fd: FormData) {
+const GALLERY = "/api/admin/yubidemo/gallery";
+
+export async function createGalleryFolderAction(fd: FormData) {
   await requireAuth();
-  const item: GalleryImage = {
-    id: str(fd, "id") || undefined,
-    url: str(fd, "url"),
-    alt: str(fd, "alt") || "Yubi Demolition project",
-    folder: str(fd, "folder"),
-    order: Number(str(fd, "order") || Date.now()),
-  };
-  await saveDoc<GalleryImage>("gallery", item);
+  const name = str(fd, "name").slice(0, 60);
+  if (!name) redirect(`${GALLERY}?error=name`);
+  await ensureGallerySaved();
+  const id = await saveDoc<GalleryFolder>("galleryFolders", { name, order: Date.now() });
   refreshPublic();
-  redirect("/api/admin/yubidemo/gallery?saved=1");
+  redirect(`${GALLERY}?folder=${id}&saved=1`);
 }
 
-export async function deleteGalleryAction(fd: FormData) {
+export async function renameGalleryFolderAction(fd: FormData) {
   await requireAuth();
-  await deleteDoc("gallery", str(fd, "id"));
+  const id = str(fd, "id");
+  const name = str(fd, "name").slice(0, 60);
+  if (!id || !name) redirect(`${GALLERY}?error=name`);
+  await ensureGallerySaved();
+  await saveDoc<GalleryFolder>("galleryFolders", { id, name, order: Number(str(fd, "order") || Date.now()) });
   refreshPublic();
-  redirect("/api/admin/yubidemo/gallery?deleted=1");
+  redirect(`${GALLERY}?folder=${id}&saved=1`);
+}
+
+export async function deleteGalleryFolderAction(fd: FormData) {
+  await requireAuth();
+  const id = str(fd, "id");
+  await ensureGallerySaved();
+  const inFolder = (await getGallery()).filter((g) => g.folderId === id).length;
+  // Never delete photos by accident: a folder must be emptied first.
+  if (inFolder > 0) redirect(`${GALLERY}?folder=${id}&error=notempty`);
+  await deleteDoc("galleryFolders", id);
+  refreshPublic();
+  redirect(`${GALLERY}?deleted=1`);
+}
+
+export type GalleryResult = { ok: true } | { ok: false; error: string };
+
+const isOwnUpload = (url: string) =>
+  url.startsWith("https://storage.googleapis.com/") || url.startsWith("https://firebasestorage.googleapis.com/");
+
+/** Saves photos that the bulk uploader has already put in Firebase Storage. */
+export async function addGalleryPhotosAction(folderId: string, urls: string[]): Promise<GalleryResult> {
+  await requireAuth();
+  const clean = urls.filter((u) => typeof u === "string" && isOwnUpload(u)).slice(0, 500);
+  if (!folderId || !clean.length) return { ok: false, error: "Nothing to add." };
+  try {
+    await ensureGallerySaved();
+    const start = Date.now();
+    await addGalleryImages(clean.map((url, i) => ({ url, alt: "Yubi Demolition project photo", folderId, order: start + i })));
+    refreshPublic();
+    return { ok: true };
+  } catch (err) {
+    console.error("[gallery] Adding photos failed", err);
+    return { ok: false, error: "Couldn't save the photos. Please try again." };
+  }
+}
+
+export async function moveGalleryPhotosAction(ids: string[], folderId: string): Promise<GalleryResult> {
+  await requireAuth();
+  if (!ids.length || !folderId) return { ok: false, error: "Choose photos and a folder." };
+  try {
+    await ensureGallerySaved();
+    await moveGalleryImages(ids.slice(0, 1000), folderId);
+    refreshPublic();
+    return { ok: true };
+  } catch (err) {
+    console.error("[gallery] Moving photos failed", err);
+    return { ok: false, error: "Couldn't move the photos. Please try again." };
+  }
+}
+
+export async function deleteGalleryPhotosAction(ids: string[]): Promise<GalleryResult> {
+  await requireAuth();
+  if (!ids.length) return { ok: false, error: "Choose photos to delete." };
+  try {
+    await ensureGallerySaved();
+    await deleteGalleryImages(ids.slice(0, 1000));
+    refreshPublic();
+    return { ok: true };
+  } catch (err) {
+    console.error("[gallery] Deleting photos failed", err);
+    return { ok: false, error: "Couldn't delete the photos. Please try again." };
+  }
 }
 
 /* ---------------------------- QUOTES ---------------------------- */

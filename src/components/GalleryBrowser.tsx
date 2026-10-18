@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef, useState, useSyncExternalStore } from "react";
-import type { GalleryFolder } from "@/lib/gallery";
-import { ALL_FOLDER } from "@/lib/gallery";
+import type { GalleryFolderView as GalleryFolder } from "@/lib/gallery";
 import Lightbox from "./Lightbox";
 import { ArrowRight } from "./Icons";
 
@@ -29,7 +28,6 @@ function FolderIcon({ className }: { className?: string }) {
 }
 
 function FolderCard({ folder, onOpen }: { folder: GalleryFolder; onOpen: () => void }) {
-  const isAll = folder.name === ALL_FOLDER;
   const [cover, ...rest] = folder.photos;
   return (
     <button type="button" onClick={onOpen} className="group block text-left">
@@ -56,11 +54,6 @@ function FolderCard({ folder, onOpen }: { folder: GalleryFolder; onOpen: () => v
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <span className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          {isAll && (
-            <span className="absolute left-4 top-4 bg-brand px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-white">
-              All photos
-            </span>
-          )}
           <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 text-white">
             <span className="min-w-0">
               <span className="flex items-center gap-2 text-[17px] font-semibold leading-tight">
@@ -100,7 +93,7 @@ export default function GalleryBrowser({ folders }: { folders: GalleryFolder[] }
           <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="eyebrow">Photo gallery</p>
-              <h2 className="mt-2 text-3xl font-bold text-ink md:text-4xl">Browse by project</h2>
+              <h2 className="mt-2 text-3xl font-bold text-ink md:text-4xl">Browse our work</h2>
             </div>
             <p className="text-[15px] text-muted">
               {folders.length} folder{folders.length === 1 ? "" : "s"}

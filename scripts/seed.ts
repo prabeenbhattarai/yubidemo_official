@@ -12,6 +12,8 @@ import { getFirestore } from "firebase-admin/firestore";
 import {
   defaultCompany,
   defaultFaqs,
+  defaultGallery,
+  defaultGalleryFolders,
   defaultHome,
   defaultProjects,
   defaultServices,
@@ -45,8 +47,10 @@ async function main() {
   await seedCollection(db, "services", defaultServices);
   await seedCollection(db, "projects", defaultProjects);
   await seedCollection(db, "faqs", defaultFaqs);
+  await seedCollection(db, "galleryFolders", defaultGalleryFolders);
+  await seedCollection(db, "gallery", defaultGallery);
 
-  console.log("\n✓ Done. Open /admin to manage your content.\n");
+  console.log("\n✓ Done. Open /api/admin/yubidemo to manage your content.\n");
   process.exit(0);
 }
 
@@ -62,7 +66,10 @@ async function seedCollection(
   }
   console.log(`Seeding ${name} (${rows.length})…`);
   const batch = db.batch();
-  for (const row of rows) batch.set(db.collection(name).doc(), row);
+  // Rows with an id (e.g. the default gallery folder) keep it, so photos can point at it.
+  for (const { id, ...row } of rows as { id?: string }[]) {
+    batch.set(id ? db.collection(name).doc(id) : db.collection(name).doc(), row);
+  }
   await batch.commit();
 }
 

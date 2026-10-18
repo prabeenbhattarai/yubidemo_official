@@ -97,13 +97,19 @@ export type Job = {
   order: number;
 };
 
+export type GalleryFolder = {
+  id?: string;
+  name: string;
+  order: number;
+};
+
 export type GalleryImage = {
   id?: string;
   url: string;
   /** Kept for screen readers only; not shown on the page. */
   alt: string;
-  /** Project title this photo belongs to. Empty = general (only in the "Yubi Demolition" folder). */
-  folder?: string;
+  /** ID of the gallery folder this photo is in. */
+  folderId?: string;
   order: number;
 };
 
@@ -275,19 +281,22 @@ export const defaultFaqs: Faq[] = [
 // No jobs are advertised by default — add them in Admin → Careers.
 export const defaultJobs: Job[] = [];
 
+export const DEFAULT_FOLDER_ID = "yubi-project-2025";
+export const defaultGalleryFolders: GalleryFolder[] = [{ id: DEFAULT_FOLDER_ID, name: "Yubi Project 2025", order: 1 }];
+
 export const defaultGallery: GalleryImage[] = [
-  { url: "/images/demo12.jpeg", alt: "Commercial interior strip-out", folder: "Industrial Warehouse Demolition", order: 1 },
-  { url: "/images/structural-demo.jpeg", alt: "Structural demolition, steel frame", folder: "Rooftop Plant Removal", order: 2 },
-  { url: "/images/demo1.jpeg", alt: "Hot works and cutting on site", order: 3 },
-  { url: "/images/demo8.jpeg", alt: "Concrete slab cutting and removal", folder: "Concrete Cutting Works", order: 4 },
-  { url: "/images/demo10.jpeg", alt: "Crew member grinding steelwork", order: 5 },
-  { url: "/images/demo11.jpeg", alt: "Timber strip-out in progress", order: 6 },
-  { url: "/images/demo9.jpeg", alt: "Commercial tenancy stripped back", folder: "Commercial Office Strip-Out", order: 7 },
-  { url: "/images/retail-stripout.jpeg", alt: "Retail site clearance", folder: "Retail Site Clearance", order: 8 },
-  { url: "/images/demo7.jpeg", alt: "Concrete cutting and site preparation", order: 9 },
-  { url: "/images/demo.jpeg", alt: "Waste removal and site clearance", order: 10 },
-  { url: "/images/demo3.jpeg", alt: "Residential strip-out", folder: "School Building Demolition", order: 11 },
-  { url: "/images/demo4.jpeg", alt: "Room strip-out ready for refurbishment", order: 12 },
-  { url: "/images/demo5.jpeg", alt: "Bathroom strip-out", order: 13 },
-  { url: "/images/demo6.jpeg", alt: "Bathroom stripped to brick", order: 14 },
+  { url: "/images/demo12.jpeg", alt: "Commercial interior strip-out", folderId: DEFAULT_FOLDER_ID, order: 1 },
+  { url: "/images/structural-demo.jpeg", alt: "Structural demolition, steel frame", folderId: DEFAULT_FOLDER_ID, order: 2 },
+  { url: "/images/demo1.jpeg", alt: "Hot works and cutting on site", folderId: DEFAULT_FOLDER_ID, order: 3 },
+  { url: "/images/demo8.jpeg", alt: "Concrete slab cutting and removal", folderId: DEFAULT_FOLDER_ID, order: 4 },
+  { url: "/images/demo10.jpeg", alt: "Crew member grinding steelwork", folderId: DEFAULT_FOLDER_ID, order: 5 },
+  { url: "/images/demo11.jpeg", alt: "Timber strip-out in progress", folderId: DEFAULT_FOLDER_ID, order: 6 },
+  { url: "/images/demo9.jpeg", alt: "Commercial tenancy stripped back", folderId: DEFAULT_FOLDER_ID, order: 7 },
+  { url: "/images/retail-stripout.jpeg", alt: "Retail site clearance", folderId: DEFAULT_FOLDER_ID, order: 8 },
+  { url: "/images/demo7.jpeg", alt: "Concrete cutting and site preparation", folderId: DEFAULT_FOLDER_ID, order: 9 },
+  { url: "/images/demo.jpeg", alt: "Waste removal and site clearance", folderId: DEFAULT_FOLDER_ID, order: 10 },
+  { url: "/images/demo3.jpeg", alt: "Residential strip-out", folderId: DEFAULT_FOLDER_ID, order: 11 },
+  { url: "/images/demo4.jpeg", alt: "Room strip-out ready for refurbishment", folderId: DEFAULT_FOLDER_ID, order: 12 },
+  { url: "/images/demo5.jpeg", alt: "Bathroom strip-out", folderId: DEFAULT_FOLDER_ID, order: 13 },
+  { url: "/images/demo6.jpeg", alt: "Bathroom stripped to brick", folderId: DEFAULT_FOLDER_ID, order: 14 },
 ];
