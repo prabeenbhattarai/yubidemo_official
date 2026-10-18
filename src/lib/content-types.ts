@@ -128,9 +128,9 @@ export const defaultHome: Home = {
   aboutP2:
     "Yubi Demolition drives innovations that streamline construction, enhance site safety, reduce environmental impact, and deliver reliable solutions. Today's expertise builds a safer, smarter tomorrow.",
   stats: [
-    { value: "15+", label: "Years of experience" },
-    { value: "500+", label: "Projects completed" },
-    { value: "100%", label: "Safety commitment" },
+    { value: "2+", label: "Years of experience" },
+    { value: "50+", label: "Projects completed" },
+    { value: "100%", label: "Client satisfaction" },
   ],
   missionText:
     "As a leading provider of demolition and site services, Yubi Demolition is committed to delivering tailored, efficient solutions for every project. Our clients trust us because we handle every aspect of demolition with precision, safety, and expertise.",
