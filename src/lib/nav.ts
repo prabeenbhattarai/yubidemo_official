@@ -16,7 +16,7 @@ export const baseNav: NavItem[] = [
       { label: "Sustainability", href: "/company#sustainability", description: "Material recovery, recycling and responsible waste." },
       { label: "Health & Safety", href: "/company#safety", description: "How we keep crews, clients and sites safe." },
       { label: "Our Projects", href: "/our-projects", description: "Strip-outs, demolition and site works we've delivered." },
-      { label: "Careers", href: "/careers", description: "Join the Yubi team — current openings." },
+      { label: "Careers", href: "/careers", description: "Join the Yubi team — send us your resume." },
     ],
   },
   { label: "Services", href: "/services", children: [] },

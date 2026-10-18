@@ -13,7 +13,7 @@ const STATIC_PAGES: SearchItem[] = [
   { title: "About / Who Are We", description: "Learn about Yubi Demolition, our mission, safety and sustainability.", href: "/company", type: "Page", keywords: "about company mission vision who are we" },
   { title: "Our Services", description: "Demolition, strip-outs, labour hire, concrete cutting and more.", href: "/services", type: "Page", keywords: "services" },
   { title: "Gallery", description: "Photos of our projects, crews and equipment on site.", href: "/gallery", type: "Page", keywords: "gallery photos images" },
-  { title: "Careers", description: "Join the Yubi Demolition team — current job openings.", href: "/careers", type: "Page", keywords: "careers jobs work employment hiring" },
+  { title: "Careers", description: "Join the Yubi Demolition team — send us your resume.", href: "/careers", type: "Page", keywords: "careers jobs work employment hiring" },
   { title: "Our Projects", description: "Completed demolition and site projects across Sydney and NSW.", href: "/our-projects", type: "Page", keywords: "projects portfolio work" },
   { title: "Contact Us", description: "Get in touch or request a quote.", href: "/contacts", type: "Page", keywords: "contact quote phone email address get in touch" },
 ];

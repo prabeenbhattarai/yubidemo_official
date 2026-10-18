@@ -1,19 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import PageBanner from "@/components/PageBanner";
-import { ArrowRight, CheckCircle } from "@/components/Icons";
+import { ArrowRight, BriefcaseIcon, CheckCircle } from "@/components/Icons";
+import { getCompany } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Careers",
-  description: "Join the Yubi Demolition team. Explore current openings for demolition and site roles across Sydney and NSW.",
+  description: "Join the Yubi Demolition team. Send us your resume for future demolition and site roles across Sydney and NSW.",
 };
-
-const roles = [
-  { title: "Demolition Labourer", type: "Full-time", location: "Sydney, NSW" },
-  { title: "Excavator Operator", type: "Full-time", location: "Western Sydney, NSW" },
-  { title: "Site Supervisor", type: "Full-time", location: "Sydney, NSW" },
-  { title: "Concrete Cutter", type: "Casual", location: "Sydney, NSW" },
-];
 
 const perks = [
   "Competitive, above-award pay rates",
@@ -22,7 +15,10 @@ const perks = [
   "Steady pipeline of varied projects",
 ];
 
-export default function CareersPage() {
+export default async function CareersPage() {
+  const company = await getCompany();
+  const resumeHref = `mailto:${company.email}?subject=${encodeURIComponent("Resume — Yubi Demolition")}`;
+
   return (
     <>
       <PageBanner title="Careers" />
@@ -38,23 +34,21 @@ export default function CareersPage() {
               want to grow with a company that invests in its team, we&apos;d love to hear from you.
             </p>
 
-            <div className="mt-10 space-y-4">
-              {roles.map((r) => (
-                <div
-                  key={r.title}
-                  className="flex flex-col gap-3 border border-gray-200 p-6 sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <div>
-                    <h3 className="text-lg font-semibold text-ink">{r.title}</h3>
-                    <p className="mt-1 text-[14px] text-muted">
-                      {r.type} · {r.location}
-                    </p>
-                  </div>
-                  <Link href="/contacts" className="btn btn-outline shrink-0">
-                    Apply Now <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              ))}
+            {/* No open roles at the moment. Add listings back here when hiring. */}
+            <div className="mt-10 flex flex-col items-start gap-5 border border-dashed border-gray-300 bg-[#fafafa] p-8 sm:flex-row sm:items-center">
+              <span className="flex h-14 w-14 shrink-0 items-center justify-center bg-brand/10 text-brand">
+                <BriefcaseIcon className="h-7 w-7" />
+              </span>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-ink">No open positions right now</h3>
+                <p className="mt-1 text-[15px] leading-relaxed text-muted">
+                  We&apos;re not advertising any roles at the moment, but we&apos;re always keen to hear from
+                  skilled people. Send us your resume and we&apos;ll keep it on file for future openings.
+                </p>
+              </div>
+              <a href={resumeHref} className="btn btn-outline shrink-0">
+                Send Your Resume <ArrowRight className="h-4 w-4" />
+              </a>
             </div>
           </div>
 
@@ -68,9 +62,9 @@ export default function CareersPage() {
                 </li>
               ))}
             </ul>
-            <Link href="/contacts" className="btn btn-red mt-8 w-full justify-center">
+            <a href={resumeHref} className="btn btn-red mt-8 w-full justify-center">
               Send Your Resume
-            </Link>
+            </a>
           </aside>
         </div>
       </section>
