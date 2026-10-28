@@ -76,10 +76,7 @@ export default function Footer({ company }: { company: Company }) {
       <div className="border-t border-white/10">
         <div className="container-x flex flex-col items-center justify-between gap-3 py-6 text-[14px] text-white/60 md:flex-row">
           <p>© {new Date().getFullYear()} {company.legalName}. Designed by Prabin Bhattarai.</p>
-          <div className="flex items-center gap-5">
-            <Link href="/terms" className="hover:text-white">Terms of Service</Link>
-            <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>
-          </div>
+          {/* Terms / Privacy links go back here once those pages exist. */}
         </div>
       </div>
     </footer>

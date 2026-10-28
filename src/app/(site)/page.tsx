@@ -5,8 +5,13 @@ import WhyUs from "@/components/home/WhyUs";
 import Sustainability from "@/components/home/Sustainability";
 import Projects from "@/components/home/Projects";
 import ContactFaq from "@/components/home/ContactFaq";
+import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
 import { getCompany, getFaqs, getHome, getProjects, getServices } from "@/lib/content";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function Home() {
   const [company, home, services, projects, faqs] = await Promise.all([

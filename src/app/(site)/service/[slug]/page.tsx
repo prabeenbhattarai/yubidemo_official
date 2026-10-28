@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageBanner from "@/components/PageBanner";
 import { getService, getServices } from "@/lib/content";
+import { OG_BASE } from "@/lib/site";
 import { ArrowRight, CheckCircle, ServiceIcon } from "@/components/Icons";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -11,7 +12,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const service = await getService(slug);
   if (!service) return { title: "Service" };
-  return { title: service.title, description: service.excerpt };
+  return {
+    title: service.title,
+    description: service.excerpt,
+    alternates: { canonical: `/service/${slug}` },
+    openGraph: { ...OG_BASE, url: `/service/${slug}`, ...(service.image ? { images: [service.image] } : {}) },
+  };
 }
 
 export default async function ServiceDetail({ params }: Params) {

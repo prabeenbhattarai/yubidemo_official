@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "Contact Us",
   description:
     "Get in touch with Yubi Demolition for a fast, no-obligation quote. Call, email or send us a message.",
+  alternates: { canonical: "/contacts" },
 };
 
 export default async function ContactsPage() {

@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Our Services",
   description:
     "Structural demolition, selective demolition, labour hire, concrete cutting, site preparation and contract cleaning — full-service demolition solutions from Yubi.",
+  alternates: { canonical: "/services" },
 };
 
 export default async function ServicesPage() {

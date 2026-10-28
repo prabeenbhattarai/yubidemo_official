@@ -7,6 +7,7 @@ import { buildFolders } from "@/lib/gallery";
 export const metadata: Metadata = {
   title: "Gallery",
   description: "A look at Yubi Demolition projects, crews and equipment on site across NSW.",
+  alternates: { canonical: "/gallery" },
 };
 
 export default async function GalleryPage() {

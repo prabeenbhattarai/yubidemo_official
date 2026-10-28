@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "About Us",
   description:
     "Learn about Yubi Demolition — an integrated demolition company delivering safe, precise and sustainable site solutions across Sydney and NSW.",
+  alternates: { canonical: "/company" },
 };
 
 const values = [

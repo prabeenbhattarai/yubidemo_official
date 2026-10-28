@@ -7,6 +7,7 @@ import JobBoard from "@/components/careers/JobBoard";
 export const metadata: Metadata = {
   title: "Careers",
   description: "Join the Yubi Demolition team. Send us your resume for future demolition and site roles across Sydney and NSW.",
+  alternates: { canonical: "/careers" },
 };
 
 const perks = [

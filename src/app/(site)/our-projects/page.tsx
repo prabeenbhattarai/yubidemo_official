@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Our Projects",
   description:
     "Explore Yubi Demolition's completed projects — structural demolition, strip-outs, site clearance and concrete cutting across Sydney and NSW.",
+  alternates: { canonical: "/our-projects" },
 };
 
 export default async function ProjectsPage() {

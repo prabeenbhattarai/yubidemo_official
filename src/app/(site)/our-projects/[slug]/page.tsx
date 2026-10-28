@@ -6,6 +6,7 @@ import ProjectPhotos from "@/components/projects/ProjectPhotos";
 import QuoteButton from "@/components/projects/QuoteButton";
 import { ArrowRight, CheckCircle } from "@/components/Icons";
 import { getCompany, getProjectBySlug } from "@/lib/content";
+import { OG_BASE } from "@/lib/site";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -17,7 +18,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title: project.title,
     description: project.blurb,
-    openGraph: project.image ? { images: [project.image] } : undefined,
+    alternates: { canonical: `/our-projects/${project.slug}` },
+    openGraph: { ...OG_BASE, url: `/our-projects/${project.slug}`, ...(project.image ? { images: [project.image] } : {}) },
   };
 }
 
