@@ -64,13 +64,34 @@ export type Service = {
 
 export type Project = {
   id?: string;
+  /** Page address: /our-projects/<slug>. Made from the title when first saved. */
+  slug?: string;
   title: string;
   location: string;
   category: string;
+  /** Short description shown on the project card. */
   blurb: string;
+  /** Main photo (card + top of the project page). */
   image: string;
   color: string;
   order: number;
+
+  /* Case-study details for the project page — all optional. */
+  client?: string;
+  /** e.g. "March 2025" */
+  completed?: string;
+  /** e.g. "6 weeks" */
+  duration?: string;
+  /** e.g. "2,400 m²" or "3 levels" */
+  size?: string;
+  /** The full story, one paragraph per entry. */
+  overview?: string[];
+  /** "What we did" bullet points. */
+  scope?: string[];
+  /** "The result" paragraph. */
+  outcome?: string;
+  /** Extra photos for the project page gallery. */
+  images?: string[];
 };
 
 export type Faq = {

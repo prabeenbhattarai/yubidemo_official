@@ -17,6 +17,7 @@ import {
   ensureGallerySaved,
   getCompany,
   getGallery,
+  getProjects,
   moveGalleryImages,
   saveCompany,
   saveDoc,
@@ -24,6 +25,7 @@ import {
 } from "@/lib/content";
 import { forwardQuote, parseEmails } from "@/lib/quote";
 import { deleteApplication } from "@/lib/careers";
+import { slugify } from "@/lib/gallery";
 import { JOB_TYPES, type Company, type Home, type Service, type Project, type Faq, type GalleryFolder, type Job, type JobType } from "@/lib/content-types";
 
 /* ------------------------------- AUTH ------------------------------- */
@@ -170,15 +172,43 @@ export async function deleteServiceAction(fd: FormData) {
 
 export async function saveProjectAction(fd: FormData) {
   await requireAuth();
+  const id = str(fd, "id") || undefined;
+  const title = str(fd, "title");
+
+  // Page address: keep an existing one so links don't break when the title is
+  // edited; otherwise make one from the title that no other project uses.
+  let slug = str(fd, "slug");
+  if (!slug) {
+    const taken = new Set((await getProjects()).filter((p) => p.id !== id).map((p) => p.slug));
+    const base = slugify(title) || "project";
+    slug = base;
+    for (let n = 2; taken.has(slug); n++) slug = `${base}-${n}`;
+  }
+
+  let images: string[] = [];
+  try {
+    const parsed = JSON.parse(str(fd, "images") || "[]");
+    if (Array.isArray(parsed)) images = parsed.filter((u): u is string => typeof u === "string" && /^https?:\/\//.test(u)).slice(0, 60);
+  } catch {}
+
   const data: Project = {
-    id: str(fd, "id") || undefined,
-    title: str(fd, "title"),
+    id,
+    slug,
+    title,
     location: str(fd, "location"),
     category: str(fd, "category"),
     blurb: str(fd, "blurb"),
     image: str(fd, "image"),
     color: str(fd, "color") || "#7c8590",
     order: Number(str(fd, "order") || 0),
+    client: str(fd, "client"),
+    completed: str(fd, "completed"),
+    duration: str(fd, "duration"),
+    size: str(fd, "size"),
+    overview: str(fd, "overview").split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
+    scope: lines(fd, "scope"),
+    outcome: str(fd, "outcome"),
+    images,
   };
   await saveDoc("projects", data);
   refreshPublic();

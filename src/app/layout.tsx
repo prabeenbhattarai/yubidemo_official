@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   },
   description:
     "Yubi Demolition is your trusted partner for structural demolition, strip-outs, labour hire, concrete cutting, site establishment and contract cleaning across Sydney and NSW.",
+  // Google Search Console ownership check — renders <meta name="google-site-verification"> in <head>.
+  verification: { google: "1y90cnvqfY0xmgaFdRCxOa3xiyrJdYLjP8jx6ajY5WA" },
 };
 
 export default function RootLayout({

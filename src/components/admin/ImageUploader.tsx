@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { shrink, upload } from "@/lib/admin-upload";
 
 export default function ImageUploader({
   name,
@@ -24,13 +25,8 @@ export default function ImageUploader({
     setBusy(true);
     setError(null);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("folder", folder);
-      const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Upload failed");
-      setUrl(data.url);
+      // Shrink first so large phone photos stay under Vercel's 4.5 MB upload limit.
+      setUrl(await upload(await shrink(file), () => {}, folder));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");
     } finally {

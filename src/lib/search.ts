@@ -35,7 +35,7 @@ export function buildSearchIndex(
     ...projects.map((p) => ({
       title: p.title,
       description: `${p.category} · ${p.location}`,
-      href: "/our-projects",
+      href: `/our-projects/${p.slug}`,
       type: "Project" as const,
       keywords: p.blurb,
     })),

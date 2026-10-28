@@ -1,5 +1,6 @@
 import "server-only";
 import { db, isFirebaseConfigured } from "./firebase-admin";
+import { slugify } from "./gallery";
 import {
   defaultCompany,
   defaultFaqs,
@@ -61,8 +62,17 @@ export async function getService(slug: string): Promise<Service | null> {
   return services.find((s) => s.slug === slug) ?? null;
 }
 
-export function getProjects(): Promise<Project[]> {
-  return readCollection<Project>("projects", defaultProjects);
+export async function getProjects(): Promise<Project[]> {
+  const list = await readCollection<Project>("projects", defaultProjects);
+  // Older projects were saved before page addresses existed.
+  return list.map((p) => ({ ...p, slug: p.slug || slugify(p.title) }));
+}
+
+export async function getProjectBySlug(slug: string): Promise<{ project: Project; prev: Project | null; next: Project | null } | null> {
+  const list = (await getProjects()).sort((a, b) => a.order - b.order);
+  const i = list.findIndex((p) => p.slug === slug);
+  if (i < 0) return null;
+  return { project: list[i], prev: list[i - 1] ?? null, next: list[i + 1] ?? null };
 }
 
 export function getFaqs(): Promise<Faq[]> {
